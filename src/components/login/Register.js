@@ -56,6 +56,12 @@ const ButtonContainer = styled.div`
   margin-top: 20px;
 `;
 
+const Message = styled.label`
+  color: darkred;
+  margin-bottom: 5px;
+  text-align: center;
+`;
+
 /**
  * Classes in React allow you to have an internal state within the class and to have the React life-cycle for your component.
  * You should have a class (instead of a functional component) when:
@@ -75,16 +81,17 @@ class Register extends React.Component {
   constructor() {
     super();
     this.state = {
-      name: null,
       username: null,
-      password: null
+      password: null,
+      alertText: ""
     };
   }
   /**
    * HTTP POST request is sent to the backend.
    * If the request is successful, a new user is returned to the front-end and its token is stored in the localStorage.
    */
-  login() {
+  register() {
+    let currentDate = new Date().toUTCString(); //get current Date
     fetch(`${getDomain()}/users`, {
       method: "POST",
       headers: {
@@ -92,19 +99,18 @@ class Register extends React.Component {
       },
       body: JSON.stringify({
         username: this.state.username,
-        name: this.state.name,
-        password: this.state.password
+        password: this.state.password,
+        date: currentDate
       })
     })
-      .then(response => response.json())
-      .then(returnedUser => {
-        const user = new User(returnedUser);
-        // store the token into the local storage
-        // if (this.state.username === this.users.username){
-        // alert("This user does already exist!");}
-        localStorage.setItem("token", user.token);
-        // user login successfully worked --> navigate to the route /game in the GameRouter
-        this.props.history.push(`/game`);
+      .then(response => {
+        if(response.status === 409 || response.status === 500) {
+          //doublicated username/password
+          this.setState({alertText: <h1>This username/passwords already exists!</h1>})
+        }
+        else {
+          this.props.history.push(`/login`);
+        }
       })
       .catch(err => {
         if (err.message.match(/Failed to fetch/)) {
@@ -114,6 +120,7 @@ class Register extends React.Component {
         }
       });
   }
+
 
   /**
    *  Every time the user enters something in the input field, the state gets updated.
@@ -125,6 +132,11 @@ class Register extends React.Component {
     // this.setState({'username': value});
     this.setState({ [key]: value });
   }
+
+  alertMessage(){
+    return this.state.alertText
+  }
+
 
   /**
    * componentDidMount() is invoked immediately after a component is mounted (inserted into the tree).
@@ -140,18 +152,12 @@ class Register extends React.Component {
       <BaseContainer>
         <FormContainer>
           <Form>
+            <Message>{this.alertMessage()}</Message>
             <Label>Username</Label>
             <InputField
               placeholder="Enter here.."
               onChange={e => {
                 this.handleInputChange("username", e.target.value);
-              }}
-            />
-            <Label>Name</Label>
-            <InputField
-              placeholder="Enter here.."
-              onChange={e => {
-                this.handleInputChange("name", e.target.value);
               }}
             />
             <Label>Password</Label>
@@ -163,10 +169,10 @@ class Register extends React.Component {
             />
             <ButtonContainer>
               <Button
-                disabled={!this.state.username || !this.state.name}
+                disabled={!this.state.username || !this.state.password}
                 width="50%"
                 onClick={() => {
-                  this.login();
+                  this.register();
                 }}
               >
                 Registrieren
