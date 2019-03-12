@@ -56,6 +56,12 @@ const ButtonContainer = styled.div`
   margin-top: 20px;
 `;
 
+const Message = styled.label`
+  color: white;
+  margin-bottom: 5px;
+  text-align: center;
+`;
+
 /**
  * Classes in React allow you to have an internal state within the class and to have the React life-cycle for your component.
  * You should have a class (instead of a functional component) when:
@@ -76,7 +82,11 @@ class Login extends React.Component {
     super();
     this.state = {
       username: null,
-      password: null
+      password: null,
+      users: [],
+      userExists: false,
+      invalidUser: false,
+      alertText: "Please input your login credentials or register."
     };
   }
   /**
@@ -96,13 +106,15 @@ class Login extends React.Component {
     })
       .then(response => response.json())
       .then(returnedUser => {
-        // if (this.state.username === state.username){
-        //   alert("Username already exists")
-        // };
-        // store the token into the local storage
-      //  localStorage.setItem("token", user.token);
-        // user login successfully worked --> navigate to the route /game in the GameRouter
+        if (returnedUser.status === 404 || returnedUser.status === 500) {
+          //  user doesn't exist
+          this.setState({alertText: "This is not a valid username/password"})
+        } else {
+          console.log(returnedUser);
+          const user = new User(returnedUser);
+        localStorage.setItem("token", user.token);
         this.props.history.push(`/game`);
+      }
       })
       .catch(err => {
         if (err.message.match(/Failed to fetch/)) {
@@ -132,12 +144,16 @@ class Login extends React.Component {
    * It will trigger an extra rendering, but it will happen before the browser updates the screen.
    */
   componentDidMount() {}
+  alertMessage(){
+    return this.state.alertText
+  }
 
   render() {
     return (
       <BaseContainer>
         <FormContainer>
           <Form>
+            <Message>{this.alertMessage()}</Message>
             <Label>Username</Label>
             <InputField
               placeholder="Enter here.."
