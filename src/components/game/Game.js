@@ -25,6 +25,15 @@ const PlayerContainer = styled.li`
   cursor: pointer;
 `;
 
+const PlayerContainerOnline = styled.li`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: green;
+`;
+
 class Game extends React.Component {
   constructor() {
     super();
@@ -77,15 +86,15 @@ class Game extends React.Component {
   render() {
     return (
       <Container>
-        <h2>Happy Coding! </h2>
-        <p>Get all users from secure end point:</p>
+        <h2>Dashboard!</h2>
+        <p>Folgend sind alle Accounts aufgelistet:</p>
         {!this.state.users ? (
           <Spinner />
         ) : (
           <div>
             <Users>
               {this.state.users.map(user => {
-                return (
+                  return (
                     <PlayerContainer onClick={()=>(this.props.history.push({pathname:`/users/${user.id}`, state:user.id}))} key={user.id}>
                       <Player user={user} />
                     </PlayerContainer>

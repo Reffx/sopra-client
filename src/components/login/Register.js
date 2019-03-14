@@ -162,14 +162,15 @@ class Register extends React.Component {
             <Margin> </Margin>
             <Label>Benutzername</Label>
             <InputField
-              placeholder="Enter here.."
+              placeholder="Hansruedi Rüdisüli..."
               onChange={e => {
                 this.handleInputChange("username", e.target.value);
               }}
             />
             <Label>Passwort</Label>
             <InputField
-                placeholder="Enter here.."
+                type="password"
+                placeholder="*******"
                 onChange={e => {
                   this.handleInputChange("password", e.target.value);
                 }}
