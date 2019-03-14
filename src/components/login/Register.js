@@ -19,7 +19,7 @@ const Form = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 60%;
-  height: 375px;
+  height: 450px;
   font-size: 16px;
   font-weight: 300;
   padding-left: 37px;
@@ -60,7 +60,7 @@ const ButtonContainer = styled.div`
 `;
 
 const Message = styled.label`
-  color: darkred;
+  color: white;
   margin-bottom: 5px;
   text-align: center;
 `;
@@ -111,7 +111,7 @@ class Register extends React.Component {
       .then(response => {
         if(response.status === 409 || response.status === 500) {
           //doublicated username
-          this.setState({alertText: <h1>Dieser Benutzername existiert bereits!</h1>})
+          this.setState({alertText: "Dieser Benutzername existiert bereits!"})
         }
         else {
           this.props.history.push(`/login`);
@@ -157,23 +157,26 @@ class Register extends React.Component {
       <BaseContainer>
         <FormContainer>
           <Form>
+            <Margin> </Margin>
             <Message>{this.alertMessage()}</Message>
-            <Label>Username</Label>
+            <Margin> </Margin>
+            <Label>Benutzername</Label>
             <InputField
               placeholder="Enter here.."
               onChange={e => {
                 this.handleInputChange("username", e.target.value);
               }}
             />
-            <Label>Password</Label>
+            <Label>Passwort</Label>
             <InputField
                 placeholder="Enter here.."
                 onChange={e => {
                   this.handleInputChange("password", e.target.value);
                 }}
             />
-            <Label>Birthdate</Label>
+            <Label>Geburtsdatum</Label>
             <InputField
+                type="date"
                 placeholder="DD.MM.YYYY"
                 onChange={e => {
                   this.handleInputChange("birthday", e.target.value);
@@ -181,7 +184,7 @@ class Register extends React.Component {
             />
             <ButtonContainer>
               <Button
-                disabled={!this.state.username || !this.state.password}
+                disabled={!this.state.username || !this.state.password || !this.state.birthday}
                 width="50%"
                 onClick={() => {
                   this.register();

@@ -90,7 +90,7 @@ class Login extends React.Component {
       users: [],
       userExists: false,
       invalidUser: false,
-      alertText: "Please input your login credentials or register."
+      alertText: ""
     };
   }
   /**
@@ -112,7 +112,7 @@ class Login extends React.Component {
       .then(returnedUser => {
         if (returnedUser.status === 404 || returnedUser.status === 500) {
           //  user doesn't exist
-          this.setState({alertText: "This is not a valid username/password"})
+          this.setState({alertText: "Benutzername oder Passwort sind falsch!"})
         } else {
           console.log(returnedUser);
           const user = new User(returnedUser);
@@ -157,15 +157,17 @@ class Login extends React.Component {
       <BaseContainer>
         <FormContainer>
           <Form>
+              <Margin> </Margin>
             <Message>{this.alertMessage()}</Message>
-            <Label>Username</Label>
+              <Margin> </Margin>
+            <Label>Benutzername</Label>
             <InputField
               placeholder="Enter here.."
               onChange={e => {
                 this.handleInputChange("username", e.target.value);
               }}
             />
-            <Label>Password</Label>
+            <Label>Passwort</Label>
             <InputField
                 placeholder="Enter here.."
                 onChange={e => {
