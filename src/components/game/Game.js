@@ -25,14 +25,6 @@ const PlayerContainer = styled.li`
   cursor: pointer;
 `;
 
-const PlayerContainerOnline = styled.li`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: green;
-`;
 
 class Game extends React.Component {
   constructor() {

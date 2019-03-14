@@ -56,17 +56,17 @@ const PlayerContainer = styled.li`
 class Profile extends React.Component{
     constructor() {
         super();
-        this.handleChange = this.handleChange.bind(this);
+        this.handleUsernameChange = this.handleUsernameChange.bind(this);
         this.handleBirthChange = this.handleBirthChange.bind(this);
         this.state = {
             username: null,
             password: "*******",
             onlineStatus: null,
             creationDate: null,
-            birthDate: "N/A",
+            birthDate: null,
             token: null,
             editMode: false,
-            editButtonText: "Edit Profile",
+            editButtonText: "Profil editieren",
             oldUsername: null,
             oldBirthDate: null,
             editModeText: "User-Information"
@@ -103,7 +103,7 @@ class Profile extends React.Component{
             });
     }
 
-    handleChange(event){
+    handleUsernameChange(event){
         this.setState({username: event.target.value})
     }
 
@@ -112,7 +112,7 @@ class Profile extends React.Component{
     }
 
     saveChanges(){
-        fetch(`${getDomain()}/users/${window.location.pathname.substr(window.location.pathname.lastIndexOf('/') + 1)}`, {
+        fetch(`${getDomain()}/users/${window.location.pathname.substr(window.location.pathname.lastIndexOf('/') + 1)}`, { //letzter "/" suchen und dann + 1 im index
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -144,13 +144,13 @@ class Profile extends React.Component{
             return(
                 <div>
                     <form>
-                        <label> Username: &nbsp; </label>
-                            <InputField type="text" value={this.state.username} onChange={this.handleChange}/>
+                        <label> Benutzername: &nbsp; </label>
+                            <InputField type="text" value={this.state.username} onChange={this.handleUsernameChange}/>
                     </form>
-                    <p>Password: ********</p>
+                    <p>Passwort: ********</p>
                     <p>Online Status: {this.state.onlineStatus}</p>
                     <form>
-                        <label> Birthday: &nbsp; </label>
+                        <label> Geburtsdatum: &nbsp; </label>
                             <InputField type="date" value={this.state.birthDate} onChange={this.handleBirthChange}/>
 
                     </form>
@@ -160,10 +160,10 @@ class Profile extends React.Component{
         }
         return(
             <div>
-                <p>Username: {this.state.username}</p>
-                <p>Password: *******</p>
+                <p>Benutzername: {this.state.username}</p>
+                <p>Passwort: *******</p>
                 <p>Status: {this.state.onlineStatus}</p>
-                <p>Birthday: {this.state.birthDate}</p>
+                <p>Geburtsdatum: {this.state.birthDate}</p>
                 <p>Creation Date: {this.state.creationDate}</p>
             </div>
         )
@@ -196,7 +196,7 @@ class Profile extends React.Component{
                                         }
                                         this.setState({
                                             editMode: !this.state.editMode,
-                                            editButtonText: (!this.state.editMode)?"Save":"Edit Profile",
+                                            editButtonText: (!this.state.editMode)?"Save":"Profil editieren",
                                             editModeText: (!this.state.editMode)?"Edit User Profile":"User-Information"
                                         })
                                     }}
@@ -211,7 +211,7 @@ class Profile extends React.Component{
                                         this.props.history.push("/game/dashboard");
                                     }}
                                 >
-                                    Go Back
+                                    Zurück
                                 </Button>
                             </ButtonContainer>
                         </div>
