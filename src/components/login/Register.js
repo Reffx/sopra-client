@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { BaseContainer } from "../../helpers/layout";
 import { getDomain } from "../../helpers/getDomain";
-import User from "../shared/models/User";
 import { withRouter } from "react-router-dom";
 import { Button } from "../../views/design/Button";
 
@@ -28,6 +27,10 @@ const Form = styled.div`
   border-radius: 5px;
   background: linear-gradient(rgb(27, 124, 186), rgb(2, 46, 101));
   transition: opacity 0.5s ease, transform 0.5s ease;
+`;
+
+const Margin = styled.div`
+  margin-top: 2em;
 `;
 
 const InputField = styled.input`
@@ -83,6 +86,7 @@ class Register extends React.Component {
     this.state = {
       username: null,
       password: null,
+      birthday: null,
       alertText: ""
     };
   }
@@ -100,13 +104,14 @@ class Register extends React.Component {
       body: JSON.stringify({
         username: this.state.username,
         password: this.state.password,
+        birthday: this.state.birthday,
         date: currentDate
       })
     })
       .then(response => {
         if(response.status === 409 || response.status === 500) {
-          //doublicated username/password
-          this.setState({alertText: <h1>This username/passwords already exists!</h1>})
+          //doublicated username
+          this.setState({alertText: <h1>Dieser Benutzername existiert bereits!</h1>})
         }
         else {
           this.props.history.push(`/login`);
@@ -167,6 +172,13 @@ class Register extends React.Component {
                   this.handleInputChange("password", e.target.value);
                 }}
             />
+            <Label>Birthdate</Label>
+            <InputField
+                placeholder="DD.MM.YYYY"
+                onChange={e => {
+                  this.handleInputChange("birthday", e.target.value);
+                }}
+            />
             <ButtonContainer>
               <Button
                 disabled={!this.state.username || !this.state.password}
@@ -178,16 +190,9 @@ class Register extends React.Component {
                 Registrieren
               </Button>
             </ButtonContainer>
-            <ButtonContainer>
-              <Button
-                  width="50%"
-                  onClick={() => {
-                    this.props.history.push(`/login`);
-                  }}
-              >
-                Du hast bereits einen Account? Login!
-              </Button>
-            </ButtonContainer>
+            <Margin> </Margin>
+              <a href="/login" style={{color: '#FCFFF7'}}>Du hast bereits einen Account? Login!</a>
+            <Margin> </Margin>
           </Form>
         </FormContainer>
       </BaseContainer>

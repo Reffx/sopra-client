@@ -30,6 +30,10 @@ const Form = styled.div`
   transition: opacity 0.5s ease, transform 0.5s ease;
 `;
 
+const Margin = styled.div`
+  margin-top: 2em;
+`;
+
 const InputField = styled.input`
   &::placeholder {
     color: rgba(255, 255, 255, 0.2);
@@ -94,7 +98,7 @@ class Login extends React.Component {
    * If the request is successful, a new user is returned to the front-end and its token is stored in the localStorage.
    */
   login() {
-    fetch(`${getDomain()}/users`, {
+    fetch(`${getDomain()}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -112,8 +116,8 @@ class Login extends React.Component {
         } else {
           console.log(returnedUser);
           const user = new User(returnedUser);
-        localStorage.setItem("token", user.token);
-        this.props.history.push(`/game`);
+          localStorage.setItem("token", user.token);
+          this.props.history.push(`/game`);
       }
       })
       .catch(err => {
@@ -179,16 +183,9 @@ class Login extends React.Component {
                 Login
               </Button>
             </ButtonContainer>
-            <ButtonContainer>
-              <Button
-                  width="50%"
-                  onClick={() => {
-                    this.props.history.push(`/register`);
-                  }}
-              >
-                Neu? Registrieren!
-              </Button>
-            </ButtonContainer>
+              <Margin> </Margin>
+              <a href="/register" style={{color: '#FCFFF7'}}>Neu? Registrieren!</a>
+              <Margin> </Margin>
           </Form>
         </FormContainer>
       </BaseContainer>
